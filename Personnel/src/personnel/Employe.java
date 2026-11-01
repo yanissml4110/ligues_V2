@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.Serializable;
+import java.time.LocalDate; // l'importation pour les dates
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -16,8 +17,9 @@ public class Employe implements Serializable, Comparable<Employe>
 	private String nom, prenom, password, mail;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
-	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
+	private LocalDate dateArrivee, dateDepart;
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
+	throws DateInvalide, SauvegardeImpossible
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -25,8 +27,30 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
+		validateDateArrivee(dateArrivee);
+		validateDateDepart(dateArrivee, dateDepart);
+		this.dateArrivee = dateArrivee;
+		this.dateDepart = dateDepart;
 	}
 	
+	/**
+	 * Regle metier: la date d'arrivee ne peut pas etre dans le futur.
+	 */
+	
+	private void validateDateArrivee(LocalDate dateArrivee) throws DateInvalide
+	{
+		if (dateArrivee != null && dateArrivee.isAfter(LocalDate.now()))
+			throw new DateInvalide("La date d'arrivee ne peut pas etre superieure a la date actuelle.");
+	}
+	
+	/**
+	 * Regle metier: la date de depart ne peut pas preceder la date d'arrivee.
+	 */
+	private void validateDateDepart(LocalDate dateArrivee, LocalDate dateDepart) throws DateInvalide
+	{
+		if (dateDepart != null && dateArrivee != null && dateDepart.isBefore(dateArrivee))
+			throw new DateInvalide("La date de depart ne peut pas etre avant la date d'arrivee.");
+	}
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 
 	 * passée en paramètre.
@@ -99,6 +123,47 @@ public class Employe implements Serializable, Comparable<Employe>
 	public String getMail()
 	{
 		return mail;
+	}
+	
+	/**
+	 * Retourne la date d'arrivée de l'employé.
+	 * @return la date d'arrivée de l'employé.
+	 */
+	public LocalDate getDateArrivee()
+	{
+		return dateArrivee;
+	}
+
+	/**
+	 * Change la date d'arrivée de l'employé.
+	 * @param dateArrivee la nouvelle date d'arrivée de l'employé.
+	 * @throws DateInvalide si la date est dans le futur ou postérieure à la date de départ.
+	 */
+	public void setDateArrivee(LocalDate dateArrivee) throws DateInvalide
+	{
+		validateDateArrivee(dateArrivee);
+		validateDateDepart(dateArrivee, this.dateDepart);
+		this.dateArrivee = dateArrivee;
+	}
+
+	/**
+	 * Retourne la date de départ de l'employé.
+	 * @return la date de départ de l'employé.
+	 */
+	public LocalDate getDateDepart()
+	{
+		return dateDepart;
+	}
+
+	/**
+	 * Change la date de départ de l'employé.
+	 * @param dateDepart la nouvelle date de départ de l'employé.
+	 * @throws DateInvalide si la date est antérieure à la date d'arrivée.
+	 */
+	public void setDateDepart(LocalDate dateDepart) throws DateInvalide
+	{
+		validateDateDepart(this.dateArrivee, dateDepart);
+		this.dateDepart = dateDepart;
 	}
 	
 	/**
