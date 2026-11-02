@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.time.LocalDate; // pour les dates bb
 
 /**
  * Représente une ligue. Chaque ligue est reliée à une liste
@@ -105,12 +106,16 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param prenom le prénom de l'employé.
 	 * @param mail l'adresse mail de l'employé.
 	 * @param password le password de l'employé.
+	 * @param dateArrivee la date d'arrivée de l'employé.
+	 * @param dateDepart la date de départ de l'employé.
 	 * @return l'employé créé. 
+	 * @throws DateInvalide si les dates sont incohérentes.
+	 * @throws SauvegardeImpossible en cas d'échec de sauvegarde.
 	 */
 
-	public Employe addEmploye(String nom, String prenom, String mail, String password)
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
 	{
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password);
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
 		employes.add(employe);
 		return employe;
 	}
