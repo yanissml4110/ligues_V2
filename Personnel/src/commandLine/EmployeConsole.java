@@ -9,7 +9,7 @@ import personnel.Employe;
 
 public class EmployeConsole 
 {
-	private Option afficher(final Employe employe)
+	Option afficher(final Employe employe)
 	{
 		return new Option("Afficher l'employé", "l", () -> {System.out.println(employe);});
 	}
