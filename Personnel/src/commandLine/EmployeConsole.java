@@ -9,7 +9,8 @@ import personnel.Employe;
 
 public class EmployeConsole 
 {
-	Option afficher(final Employe employe)
+	//j'ai enlevé le private devant la methode afficher pour que LigueConsole puisse l'utiliser
+	 Option afficher(final Employe employe)
 	{
 		return new Option("Afficher l'employé", "l", () -> {System.out.println(employe);});
 	}
@@ -53,5 +54,4 @@ public class EmployeConsole
 		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
 	}
 	
-
 }
