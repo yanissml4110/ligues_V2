@@ -7,6 +7,7 @@ import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import personnel.Employe;
 
+
 public class EmployeConsole 
 {
 	//j'ai enlevé le private devant la methode afficher pour que LigueConsole puisse l'utiliser
