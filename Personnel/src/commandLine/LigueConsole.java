@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import commandLineMenus.List;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
-import java.time.LocalDate;
 
 
 
@@ -159,9 +158,6 @@ public class LigueConsole
 		menu.addBack("q");
 		return menu;
 	}
-
-	/* suppression de modifierEmploye(Ligue)
-	
 	/**
 	 * Option qui permet de choisir, parmi les employés de la ligue,
 	 * le nouvel administrateur.
