@@ -6,7 +6,7 @@ import commandLineMenus.List;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 
 
 import personnel.*;
@@ -72,7 +72,7 @@ public class LigueConsole
 		Menu menu = new Menu("Editer " + ligue.getNom());
 		menu.add(afficher(ligue));
 		menu.add(gererEmployes(ligue));
-		//menu.add(changerAdministrateur(ligue));
+		menu.add(changerAdministrateur(ligue));
 		menu.add(changerNom(ligue));
 		menu.add(supprimer(ligue));
 		menu.addBack("q");
@@ -136,14 +136,17 @@ public class LigueConsole
 					try 
 					{
 						ligue.addEmploye(getString("nom : "), 
-								getString("prenom : "), getString("mail : "), 
-								getString("password : "));
+								getString("prenom : "), 
+								getString("mail : "), 
+								getString("password : "),
+								employeConsole.lireDate("date d'arrivée (aaaa-mm-jj, vide = aucune) : "),
+								employeConsole.lireDate("date de départ (aaaa-mm-jj, vide = aucune) : "));
 					}
 					catch (DateInvalide | SauvegardeImpossible exception)
 					{
 						System.err.println(exception.getMessage());
+					}
 				}
-			}
 		);
 	}
 	
@@ -157,20 +160,31 @@ public class LigueConsole
 		return menu;
 	}
 
-	// suppression de modifierEmploye(Ligue)
+	/* suppression de modifierEmploye(Ligue)
 	
+	/**
+	 * Option qui permet de choisir, parmi les employés de la ligue,
+	 * le nouvel administrateur.
+	 */
 	private List<Employe> changerAdministrateur(final Ligue ligue)
 	{
-		return null;
-	}		
-
-	private List<Employe> modifierEmploye(final Ligue ligue)
-	{
-		return new List<>("Modifier un employé", "e", 
+		return new List<>("Changer d'administrateur", "c",
 				() -> new ArrayList<>(ligue.getEmployes()),
-				employeConsole.editerEmploye()
+				(index, employe) -> 
+				{
+					try
+					{
+						ligue.setAdministrateur(employe);
+						System.out.println(employe.getNom() + " est maintenant administrateur de " + ligue.getNom());
+					}
+					catch (DroitsInsuffisants e)
+					{
+						System.err.println("Cet employé ne peut pas être administrateur de cette ligue.");
+					}
+				}
 				);
 	}
+
 	
 	private Option supprimer(Ligue ligue)
 	{
